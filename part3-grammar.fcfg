@@ -1,0 +1,215 @@
+## Natural Language Toolkit: example-grammar.fcfg
+##
+## Introduction to Formal Linguistics Final Project: Parsing for 100 Arabic Sentences, Context-free grammar
+##
+## Author: Simon Dobnik 
+## Email: simon.dobnik@gu.se
+
+% start S
+# ###################
+# Grammar Productions
+# ###################
+
+
+
+# Sentences
+S -> VP
+S -> NP
+
+# Verb phrases
+
+
+VP -> V[Tense=Imp]
+
+VP -> V[Subcat = IV, Gender=?g] NN[Gender=?g]
+VP -> V[Subcat = IV, Gender=?g] NN[NUM= ?n, Gender=?g] PP[Case=IDet, NUM= ?n, Gender = ?g]
+VP -> V[Subcat = IV, Gender=?g] NN[NUM= ?n, Gender=?g] PP[Case=Det]
+VP -> V[Subcat = IV] PP[Case=Det]
+VP -> V[Subcat = IV,Gender=?g] PP[Case=IDet, Gender=?g]
+
+VP -> V[Subcat = TV] NN[Case=accIDet]
+VP -> V[Subcat = TV, Gender=?g] NN[Gender=?g] NN[Case=Det]
+VP -> V[Subcat = TV, NUM=?n, Gender=?g] NN[Case=IDet,NUM=?n, Gender=?g]
+
+VP -> V[Subcat = TV2, Gender=?g] NN[Gender=?g] NN[Case=Det] NP
+VP -> V[Subcat = TV2, Gender=?g] NN[Gender=?g, Pro=?p] NN[Case=IDet, Pro=?p] NP
+VP -> V[Subcat = TV2, Gender=?g] NN[Gender=?g] NP
+VP -> V[Subcat = TV2] NP
+VP -> V[Subcat = TV2, Gender=?g] NN[Gender=?g, Pro=?p] NP preNP[Case=IDet, Pro=?p]
+
+
+VP -> VK[Subcat = Kana, Gender=?g] NN[Case= nomDet, NUM=?n, Gender=?g] NP[Case = accIDet, NUM=?n, Gender=?g]
+VP -> VK[Subcat = Kana, Gender=?g] NN[Case= nomDet, NUM=?n, Gender=?g] VP[NUM=?n, Gender=?g]
+VP -> VK[Subcat = Kana, Gender=?g] preNP[Case = GenDet, NUM=?n, Gender=?g] NN[Case= nomIDet, NUM=?n, Gender=?g] 
+
+VP -> VP[Gender=?g] Relpro[NUM=?n, Gender=?g] VP[NUM=?n, Gender=?g]
+
+VP -> V[Gender=?g] Relpro[Gender=?g] NP
+
+VP[NUM=?n,Gender=?g] -> V[Subcat = TV, NUM=?n, Gender=?g] NN[Gender=?g] PP
+VP[NUM=?n, Gender=?g] -> V[NUM=?n, Gender=?g] NN AdvP[Num=?n, Gender=?g]
+VP[NUM=?n, Gender=?g] -> V[Subcat = TV,NUM=?n, Gender=?g] NP[Case=Det]
+
+
+# Noun phrases 
+NP -> PP VP
+NP ->  ProN[NUM= ?n, Gender=?g, Case=?c] NN[NUM= ?n, Gender=?g, Case = IDet]
+NP ->  ProN[NUM= sg, Gender=?g] ProN[Gender=?g, Case = name]
+NP ->  ProN[NUM= ?n, Gender=?g] VP[NUM= ?n, Gender=?g]
+NP ->  NN[NUM= ?n, Gender=?g, Case=Det] VP[NUM= ?n, Gender=?g]
+NP -> ProN[NUM= sg, Gender=?g, Case=Dempro, Type=nt] NP[NUM= sg, Gender=?g]
+NP -> ProN[NUM= du, Gender=?g, Case= Dempro, Type=nt] NP[NUM= du, Gender=?g]
+NP -> NN[Case= Det] PP[Case=Det]
+NP -> PP[Case= Det] NN[Case=IDet]
+NP -> NN[Gender=?g, Case = Det] NP[Gender=?g]
+NP -> SP[Gender=?g] V[Gender=?g]
+NP -> ENA NP[Case= accDet, NUM=?n, Gender=?g] NP[Case = nomIDet, NUM=?n, Gender=?g]
+NP -> ENA NP[Case= accDet, NUM=?n, Gender=?g] VP
+NP -> ENA NP[Case= accDet, NUM=?n, Gender=?g] SP[Case= normDet]
+NP -> ProN[Num=sg] AND ProN[Num=sg] VP[Num = du]
+NP -> NN[Num=du] AND NN[] VP[Num = pl]
+NP[Gender=?g] -> ADJP[Gender=?g]
+NP -> NP Relpro NP
+NP -> NN AdvP
+
+NP[NUM= ?n, Gender=?g] -> NN[NUM= ?n, Gender=?g, Case = IDet] NN[Gender=?g, Case = IDet]
+NP[NUM= sg, Gender=f] -> NN[NUM= pl, Case = Det, Type=nt] NN[NUM= sg, Gender=f, Case = IDet]
+NP[NUM= ?n, Gender=?g, Case=?c] -> NN[NUM= ?n, Gender=?g, Case=?c]
+
+# Preposition phrase
+PP[Case=?c, NUM= ?n, Gender = ?g ] -> prep NP[Case=?c, NUM= ?n, Gender = ?g]
+PP[Case=?c,NUM= ?n, Gender = ?g] -> preNP[Case=?c,NUM= ?n, Gender = ?g] PP
+PP[Case=?c,NUM= ?n, Gender = ?g] -> preNP[Case=?c,NUM= ?n, Gender = ?g]
+
+
+# Adjective phrase
+ADJP[Gender=?g] -> NN[NUM= pl, Gender=?g, Case=?c, Type=nt] Adj[NUM= sg, Gender=?g, Case=?c]
+
+# Adverb Phrase
+AdvP -> Adv
+AdvP -> Adv[NUM= ?n, Gender=?g] Adj[NUM= ?n, Gender=?g]
+AdvP -> advPT NN
+AdvP -> Adv Adv
+
+
+# Sentence Pharse
+SP[Case= normDet] -> NN[Case = IDet] NN[Case = Det]
+
+# ###################
+# Lexical Productions
+# ###################
+
+ProN[NUM=sg, Gender=m, Case=name] -> 'أحمد'
+ProN[NUM=sg, Gender=f, Case=name] -> 'سها'|'سلمى'
+ProN[NUM=sg, Gender=m, Case=Detached]-> 'هو'
+ProN[NUM=sg, Gender=f, Case=Detached]-> 'هي'
+ProN[NUM=du, Case=Detached]-> 'هما'
+ProN[NUM=pl, Gender=m, Case=Detached]-> 'هم'
+ProN[NUM=pl, Gender=f, Case=Detached]-> 'هن'
+ProN[NUM=pl, Case=Subpro]-> 'نحن'
+ProN[NUM=sg, Gender=m, Case=Dempro]-> 'هذا'
+ProN[NUM=du, Gender=m, Case=Dempro]-> 'هذان'
+ProN[NUM=du, Gender=f, Case=Dempro]-> 'هاتان'
+ProN[NUM=pl, Case=Dempro]-> 'هؤلاء'
+
+
+
+
+NN[NUM=sg,Gender=m,Case=Det,Pro=m, Type= hm] -> 'الطفل' | 'الولد'|'المعم' |'الرئيس'|'الأب'|'التلميذ'|'الكاتب'|'الرجل'|'الفلاح'|'الخطيب'|'المجرم'|'الفلكي'|'المراسل'|'الناس'
+NN[NUM=sg,Gender=m,Case=Det,Pro=m, Type= nt] ->'المكتب'| 'الدررس' |'الصباح' | 'المنزل' | 'السوق' |'الطعام' |'الصف'|'الواجب'|'الحليب'|'البيت'|'الكتاب'|'العقاب'|'الإمتحان'|'المنبر'|'الطريق'
+NN[NUM=sg,Gender=f,Case=Det, Type= hm] -> 'الأم'|'الفتاة'|'التلميذة'|'المدرسة'|'الكاتبة'
+NN[NUM=sg,Gender=f,Case=Det, Type= nt] -> 'المكتبة'|'الحديقة'|'العاصفة'|'المباراة'|'السيارة'|'الكرة'
+NN[NUM=du,Gender=m,Case=Det,Pro=m, Type= hm] ->'الكاتبان'|'الرجلان'|'الطفلان'
+NN[NUM=du,Gender=m,Case=Det,Pro=m, Type= nt] ->'المكتبان'|'البيتان'
+NN[NUM=du,Gender=f,Case=Det,Pro=m, Type= hm] ->'الكاتبتان'|'الطالبتان'
+NN[NUM=du,Gender=f,Case=Det,Pro=m, Type= nt] ->'المكتبان'
+NN[NUM=pl,Gender=m,Case=Det, Type= hm]->'الآباء' | 'المدرسون' |'التلاميذ'|'المجتهدين'|'الكاتبون'|'الكتاب'|'الاولاد'|'الشرطة'
+NN[NUM=pl,Gender=m,Case=Det, Type= nt]->'الصفوف' |'المكاتب'|'القصص'
+NN[NUM=pl,Gender=f,Case=Det, Type= hm] -> 'الفتيات'|'الكاتبات'
+NN[NUM=pl,Gender=f,Case=Det, Type= nt] -> 'المكتبات'|'الأشياء'|'الأحلام'
+
+
+NN[NUM=sg,Gender=m,Case=IDet, Pro=m]-> 'والده'|'عمله'|'عصيره'|'ابنه'
+NN[NUM=sg,Gender=m,Case=IDet, Type=nt]-> 'بابه'
+NN[NUM=sg,Gender=m,Case=IDet]-> 'شريف'|'جديد'|'ماهر'|'ناجح'|'رجل'|'شديد'|'أدنى'|'خير'
+NN[NUM=du,Gender=m,Case=IDet] ->'درسكما'|'جديدان'|'ماهران'|'كاتبان'
+NN[NUM=pl,Gender=m,Case=IDet]->'ابنائهم' |'درسكم'|'صفوفكم'|'صفكم'|'ماهرون'|'المهرة'|'ربكم'
+NN[NUM=sg,Gender=f,Case=IDet] ->'دراجتها'|'ماهرة'|'جديدة'|'جميلة'|'درسها'
+NN[NUM=du,Gender=f,Case=IDet] ->'درسكن'|'جديدتان'|'ماهرتان'
+NN[NUM=pl,Gender=f,Case=IDet]->'دروسكن'|'ماهرات'|'مجتهدات'
+NN[NUM=pl,Gender=f,Case=IDet, Type=nt]-> 'هدايا'|'مفاتيح'
+
+NN[NUM=sg,Gender=m,Case=nomDet] ->'الضيف'|'الهلال'|'الضباب'|'الغش' |'الفلاح'|'المعلم'
+NN[NUM=sg,Gender=f,Case=nomDet] ->'الشمس'
+NN[NUM=pl,Gender=m,Case=nomDet] ->'الضيوف'|'المجتهدون'
+NN[NUM=pl,Gender=f,Case=nomDet] ->'المجتهدات'
+
+NN[NUM=sg,Gender=m,Case=accDet,Pro=m, Type= hm] ->'المعلم'|'النصر'|'المطر'|'الله'
+NN[NUM=du,Gender=m,Case=accDet,Pro=m, Type= hm] -> 'المعلمين' 
+NN[NUM=pl,Gender=m,Case=accDet,Pro=m, Type= hm] -> 'المعلمين'
+NN[NUM=sg,Gender=m,Case=accDet,Pro=m, Type= nt] -> 'الدرس'
+NN[NUM=sg,Gender=f,Case=accDet,Pro=m, Type= nt] -> 'العاصفة'
+
+
+NN[NUM=sg,Gender=m,Case=nomIDet] ->'وطن'|'شريف'|'لؤلؤ'|'قريب'|'سهل'
+NN[NUM=du,Gender=m,Case=nomIDet] ->'شريفان' 
+NN[NUM=pl,Gender=m,Case=nomIDet] ->'شريفون' 
+NN[NUM=sg,Gender=f,Case=nomIDet] ->'قادمة'
+
+
+NN[NUM=sg,Gender=m,Case=accIDet]-> 'شبعانا' |'بدرا'|'كثيفا'|'فرحان'|'مقبولا'|'كتابا'|'عملا'|'أجر'
+NN[NUM=pl,Gender=m,Case=accIDet]-> 'فرحيين'|'مطمئنين'
+NN[NUM=sg,Gender=f,Case=accIDet]-> 'ساطعة'
+NN[NUM=pl,Gender=f,Case=accIDet]-> 'سعيدات'
+
+ENA -> 'إن'|'أن'|'كأن'|'لعل'
+
+
+#Transitive verb with one object
+V[Subcat = TV, NUM=sg, Gender=m]-> 'كتب' | 'شرب' |'يربي' |'يدرس'|'أبصرت'|'قطعت'|'رأيت'|'لايضيع'|'أحسن'|'قال'
+V[Subcat = TV, NUM=sg, Gender=m, Tense=Imp]->'اقرأ'
+V[Subcat = TV, NUM=sg, Gender=m, Pro=m]-> 'كتبه' |'تحرسه'
+V[Subcat = TV, NUM=du, Gender=m]-> 'اقرآ'|'كتبا'|'يلعبان'
+V[Subcat = TV, NUM=pl, Gender=m]-> 'اقرؤوا'|'كتبوا'|'اعلموا'|'اعبدوا'|'خلقكم'|'أتستبدلون'|'يلعبون'
+V[Subcat = TV, NUM=sg, Gender=f]-> 'تطبخ' | 'اقرئي'| 'شربت'|'تركب'|'اختفت'
+V[Subcat = TV, NUM=sg, Gender=f, Pro=m]-> 'كتبته'|'كتبت'
+V[Subcat = TV, NUM=du, Gender=f]-> 'اقرأن'|'كتبتا'
+V[Subcat = TV, NUM=pl, Gender=f, Tense=Imp]-> 'اقرأن'|'كتبن'
+V[Subcat = TV, NUM=pl]-> 'كتبنا'
+
+V[Subcat = TV2, NUM=sg, Gender=m, pro=m]->'منح'|'أعطى'|'أخبر'|'أنبأ'
+V[Subcat = TV2, NUM=pl, Gender=m, pro=m]-> 'منحهم'
+V[Subcat = TV2, NUM=pl, pro=m]-> 'منحناهم'|'نرى'
+V[Subcat = TV2, NUM=pl, pro=f]-> 'أعطيناها'
+
+VK[Subcat = Kana, NUM=sg, Gender=m]-> 'كان'|'بات'|'يصير'|'أصبح'|'ليس' |'ظل'
+VK[Subcat = Kana, NUM=sg, Gender=f]-> 'كانت' | 'باتت'
+
+V[Subcat = IV,NUM=sg, Gender=m]-> 'نام' |'يلعب' |'يجتمع'|'لعب'|'جاء'|'فاز'|'استيقظ'|'ذهب'
+V[Subcat = IV, NUM=sg, Gender=m, Tense=Imp]->'اذهب'
+V[Subcat = IV,NUM=du, Gender=m]->'نجحا'|'يلعبان'
+V[Subcat = IV,NUM=sg, Gender=f]-> 'لعبت'
+V[Subcat = IV,NUM=sg]-> 'ذهبت'
+V[Subcat = IV, NUM=pl, Gender=m]-> 'اذهبوا'|'لعبوا'
+V[Subcat = IV, NUM=pl, Gender=f, Tense=Imp]-> 'اذهبن'
+
+
+
+prep -> 'في' | 'إلى' |'مع' |'عند'
+preNP[Case=IDet, NUM=pl, Gender=f]-> 'بألعابهن'
+preNP[Case=IDet, NUM=sg, Gender=m]-> 'عنه'
+preNP[Case= GenDet, NUM=sg, Gender=m]-> 'للخائن'
+preNP[Case=IDet, NUM=sg, Gender=m, pro=m]-> 'لابنه'
+
+Relpro[NUM=sg, Gender=m]-> 'الذي'|'بالذي'|'من'|'ما'
+Relpro[NUM=du, Gender=m]-> 'اللذان'
+Relpro[NUM=pl, Gender=m]-> 'الذين'
+
+
+AND -> 'و'
+Adj[NUM=sg,Gender=f,Case=IDet]-> 'قيمة'|'عالية'
+Adj[NUM=sg,Gender=m,Case=IDet]->'شريف'
+
+Adv -> 'باحترافية'|'راكضا'|'لاهين'|'نشيطا'|'فرحا'|'منتبها'|'صعبا'|'قادمنة'|'جميلة'
+
+advPT -> 'فوق'
